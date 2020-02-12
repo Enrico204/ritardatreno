@@ -1,0 +1,11 @@
+[package]
+name = "ritardatreno"
+version = "0.1.0"
+authors = ["Enrico204 <enrico204@gmail.com>"]
+edition = "2018"
+
+[dependencies]
+structopt = "0.3"
+trenitalia = "0.3.4"
+colored = "1.9.2"
+chrono = "0.4.10"
