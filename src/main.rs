@@ -1,17 +1,19 @@
 use structopt::StructOpt;
 use colored::*;
+use std::num::NonZeroU32;
 
 mod lookup_by_train;
 mod utils;
 mod search_station;
 mod trip;
 
+/// Un semplice client per il crate trenitalia.
 #[derive(Debug, StructOpt)]
-#[structopt(name = "ritardatreno", about = "Un semplice client per il crate trenitalia.")]
+#[structopt(name = "ritardatreno")]
 struct Cli {
     /// Numero del treno (per la ricerca tramite codice del treno)
-    #[structopt(short, long, default_value = "0")]
-    number: u32,
+    #[structopt(short, long)]
+    number: Option<NonZeroU32>,
 
     /// Stazione di partenza (necessaria se il codice del treno è condiviso tra più classi)
     #[structopt(short = "u", long, default_value = "")]
@@ -45,8 +47,8 @@ struct Cli {
 fn main() {
     let args: Cli = Cli::from_args();
 
-    if args.number > 0 {
-        lookup_by_train::lookup(args.number, args.from);
+    if args.number.is_some() {
+        lookup_by_train::lookup(args.number.unwrap().get(), args.from);
     } else if args.search_station != "" {
         search_station::by_name(args.search_station);
     } else if args.latitude > 0.0 {

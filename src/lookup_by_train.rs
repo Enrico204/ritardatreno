@@ -11,7 +11,11 @@ pub fn lookup(train_number: u32, start_from: String) -> Result<(), Box<dyn std::
         let stazione = train_info.current_station.aliases.join(", ");
         println!("Treno in stazione a {} con {} minuti di ritardo", stazione.bold(), train_info.current_delay)
     } else {
-        println!("Treno in movimento, ultimo ritardo rilevato: {}", train_info.current_delay)
+        if train_info.stops.len() > 0 && train_info.stops[0].departure.is_some() {
+            println!("Treno in movimento, ultimo ritardo rilevato: {}", train_info.current_delay)
+        } else {
+            println!("Treno non ancora partito, ultimo ritardo dichiarato: {}", train_info.current_delay)
+        }
     }
 
     println!("Tragitto: ");
