@@ -20,41 +20,41 @@ struct Cli {
     number_from: String,
 
     /// Latitudine della posizione (per la ricerca della stazione più vicina)
-    #[structopt(short = "l", long, default_value = "0.0")]
-    latitude: f32,
+    #[structopt(short = "l", long)]
+    latitude: Option<f32>,
 
     /// Longitudine della posizione (per la ricerca della stazione più vicina)
-    #[structopt(short = "o", long, default_value = "0.0")]
-    longitude: f32,
+    #[structopt(short = "o", long)]
+    longitude: Option<f32>,
 
     /// Cerca per nome della stazione
-    #[structopt(short = "s", long, default_value = "")]
-    search_station: String,
+    #[structopt(short = "s", long)]
+    search_station: Option<String>,
 
     /// Cerca tragitto: punto di partenza (specificare un nome della stazione completo, vedere -s)
-    #[structopt(short = "f", long, default_value = "")]
-    from: String,
+    #[structopt(short = "f", long)]
+    from: Option<String>,
 
     /// Cerca tragitto: punto di arrivo (specificare un nome della stazione completo, vedere -s)
-    #[structopt(short = "t", long, default_value = "")]
-    to: String,
+    #[structopt(short = "t", long)]
+    to: Option<String>,
 
     /// Cerca tragitto: orario di partenza (specificare come YYYY-mm-DD HH:ii)
-    #[structopt(short = "w", long, default_value = "")]
-    when: String,
+    #[structopt(short = "w", long)]
+    when: Option<String>,
 }
 
 fn main() {
     let args: Cli = Cli::from_args();
 
-    if args.number.is_some() {
-        lookup_by_train::lookup(args.number.unwrap().get(), args.from);
-    } else if args.search_station != "" {
-        search_station::by_name(args.search_station);
-    } else if args.latitude > 0.0 {
-        search_station::by_position(args.latitude, args.longitude);
-    } else if args.from != "" {
-        trip::calc(args.from, args.to, args.when);
+    if let Some(number) = args.number {
+        lookup_by_train::lookup(number.get(), args.number_from);
+    } else if let Some(search_station) = args.search_station {
+        search_station::by_name(search_station);
+    } else if let (Some(latitude), Some(longitude)) = (args.latitude, args.longitude) {
+        search_station::by_position(latitude, longitude);
+    } else if let (Some(from), Some(to), Some(when)) = (args.from, args.to, args.when) {
+        trip::calc(from, to, when);
     } else {
         println!("Nessuna azione richiesta. Digitare {} {} per ottenere l'help", "", "-h".bold())
     }
