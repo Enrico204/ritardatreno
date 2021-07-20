@@ -6,7 +6,7 @@ edition = "2018"
 license = "MIT"
 
 [dependencies]
-structopt = "0.3.21"
+structopt = "0.3.22"
 trenitalia = "0.3.4"
-colored = "1.9.3"
+colored = "2.0.0"
 chrono = "0.4.19"

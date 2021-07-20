@@ -48,11 +48,14 @@ fn main() {
     let args: Cli = Cli::from_args();
 
     if let Some(number) = args.number {
-        lookup_by_train::lookup(number.get(), args.number_from);
+        lookup_by_train::lookup(number.get(), args.number_from)
+            .expect("Errore nella ricerca del treno");
     } else if let Some(search_station) = args.search_station {
-        search_station::by_name(search_station);
+        search_station::by_name(search_station)
+        .expect("Errore nella ricerca della stazione");
     } else if let (Some(latitude), Some(longitude)) = (args.latitude, args.longitude) {
-        search_station::by_position(latitude, longitude);
+        search_station::by_position(latitude, longitude)
+            .expect("Errore nella ricerca per posizione");
     } else if let (Some(from), Some(to), Some(when)) = (args.from, args.to, args.when) {
         trip::calc(from, to, when);
     } else {
